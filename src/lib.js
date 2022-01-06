@@ -1,10 +1,10 @@
 import fs from 'fs'
+import { prompts } from 'inquirer';
 
 /**
  * 
  * @param {*} questions 
  * @param {*} rand 
- * @returns 
  * 
  * [ x ] Implement 'chooseRandom' function
  * [ x ] Should take 2 parameters, 'array' and 'number'
@@ -17,36 +17,69 @@ import fs from 'fs'
  * [ x ] Should return a random array if possible (size > 1)
  * [ x ] Should return an array of the passed in length
  * [ ] Run command 'npm test' and ensure all tests for chooseRandom pass successfully
+ * 
  */
-export const chooseRandom = (questions = [], rand) => {
+export const chooseRandom = (questions = [], numItems) => {
   console.log("");
-  console.log("Questions: ", questions, " Rand: ", rand);
+  console.log("Questions: ", questions, " Items: ", numItems);
 
   // base cases
   if (questions.length <= 1) return questions;
-  if (rand < 1 || rand >= questions.length || rand === undefined) rand = Math.floor(Math.random() * (questions.length) + 1);
+  if (numItems < 1 || numItems >= questions.length || numItems === undefined) numItems = Math.floor(Math.random() * (questions.length) + 1);
   console.log("Min: ", 1, "Max: ", questions.length);
-  console.log("Re-Rand: ", rand);
+  console.log("Re-Items: ", numItems);
 
   // non-mutated array assignment
   let shuffled = [...questions];
 
   // Fisher Yates method for random sorting
-  for (let i = shuffled.length -1; i > 0; i--) {
+  for (let i = shuffled.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * i)
     let k = shuffled[i]
     shuffled[i] = shuffled[j]
     shuffled[j] = k
   }
   console.log("Shuffled: ", shuffled);
-  console.log("Result: ", shuffled.slice(0, rand));
+  console.log("Result: ", shuffled.slice(0, numItems));
 
   // return array of specified length
-  return shuffled.slice(0, rand);
+  return shuffled.slice(0, numItems);
 }
 
-export const createPrompt = () => {
-  // TODO implement createPrompt
+/**
+ * 
+ * @param {*} questions 
+ * @param {*} numItems 
+ * 
+ * [ ] Implement createPrompt using the given format below and the given test cases
+ * [ ] Implement the createQuestions function based on the format below and provided tests
+ * [ ] Ensure all tests for createPrompt & createQuestions are passing when you run the npm test command
+ * 
+ */
+export const createPrompt = (obj = { numQuestions: 1, numChoices: 2 }) => {
+  let questions = [];
+
+  for (let q in obj["numQuestions"]) {
+    questions.push(
+      {
+        type: 'input',
+        name: `question-${obj["numQuestions"][q]}`,
+        message: `Enter question ${obj["numQuestions"][q]}`
+      }
+    );
+
+    for (let c in obj["numChoices"]) {
+      obj.push(
+        {
+          type: 'input',
+          name: `question-${obj["numQuestions"][q]}-choice-${obj["numChoices"][c]}`,
+          message: `Enter answer choice ${obj["numChoices"][c]} 1 for question ${obj["numQuestions"][q]}`
+        }
+      );
+    }
+  }
+  console.log(questions);
+  return questions;
 }
 
 export const createQuestions = () => {
