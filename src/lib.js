@@ -50,31 +50,17 @@ export const chooseRandom = (arr = [], numItems) => {
 
 /**
  * 
- * @param {*} obj 
+ * @param {*} numQuestions
+ * @param {*} numChoices
  * 
  * [ ] Implement 'createPrompt' using the given format below and the given test cases
  * [ ] Ensure all tests for 'createPrompt' & 'createQuestions' are passing when you run the npm test command
  * 
  */
-export const createPrompt = (obj = { numQuestions: 1, numChoices: 2 }) => {
-  let questions = { ...obj };
+export const createPrompt = ({ numQuestions = 1, numChoices = 2 } = {}) => {
   let result = [];
 
-  // console.log("ORIGINAL_OBJECT: ", obj);
-  // console.log("ORIGINAL_QUESTIONS: ", questions);
-
-  // base cases
-  if (obj["numQuestions"] < 1) questions["numQuestions"] = 1;
-  if (obj["numChoices"] < 2) questions["numChoices"] = 2;
-  if (obj["numQuestions"] === undefined || obj["numChoices"] < 2 === undefined) {
-    questions = {
-      numQuestions: 1,
-      numChoices: 2
-    }
-  }
-  // console.log('CHANGES', questions);
-
-  for (let q = 1; q <= questions["numQuestions"]; q++) {
+  for (let q = 1; q <= numQuestions; q++) {
     result.push(
       {
         type: 'input',
@@ -83,7 +69,7 @@ export const createPrompt = (obj = { numQuestions: 1, numChoices: 2 }) => {
       }
     );
 
-    for (let c = 1; c <= questions["numChoices"]; c++) {
+    for (let c = 1; c <= numChoices; c++) {
       result.push(
         {
           type: 'input',
@@ -93,9 +79,6 @@ export const createPrompt = (obj = { numQuestions: 1, numChoices: 2 }) => {
       );
     }
   }
-  // console.log("Result: ", result, '\n', result.length);
-  // console.log("ACTUAL: ", result.length);
-  // console.log("TARGET: ", questions["numQuestions"] + (questions["numQuestions"] * questions["numChoices"]));
   return result;
 }
 
@@ -108,34 +91,45 @@ export const createPrompt = (obj = { numQuestions: 1, numChoices: 2 }) => {
  * 
  */
 export const createQuestions = (obj = {}) => {
-  /**
-   *      let obj = { 
-   *          question: 'some-text', 
-   *          choice: 'some-choice'
-   *      }
-   */
-
-  console.log('\n', 'INPUT: ', obj);
+  // console.log('\n', 'INPUT: ', obj);
 
   let questions = { ...obj };
   let result = [];
 
-  for (let q in questions) {
-    let choicesArr = [];
-    if (/choice/gi.test(q)) { // if key contains 'choice'
-      choicesArr.push(questions[q]);
+  let temp;
+  let getName;
+  let getMessage;
+  let getChoices = [];
+
+  for (let key in questions) {
+    if (!key.includes("choice") || !key.includes(temp)) {
+      temp = key // 'question-#'
+
+      getName = key;
+      getMessage = questions[key];
     }
 
-    result.push(
-      {
-        type: 'list',
-        name: q,
-        message: questions[q],
-        choices: choicesArr
-      }
-    )
+    if (key.includes("choice") && key.includes(temp)) {
+      getChoices.push(questions[key]);
+    }
+
+    let keys = Object.keys(questions);
+    let nextIndex = keys.indexOf(key) + 1;
+    let nextItem = keys[nextIndex];
+
+    if (nextItem === undefined || !nextItem.includes(temp)) { // look-ahead
+      result.push(
+        {
+          type: 'list',
+          name: getName,
+          message: getMessage,
+          choices: getChoices
+        }
+      );
+      getChoices = [];
+    }
   }
-  console.log("OUTPUT: ", result);
+  // console.log('\n', 'OUTPUT: ', result);
   return result;
 }
 
