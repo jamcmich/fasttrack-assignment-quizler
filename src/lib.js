@@ -16,7 +16,7 @@ import { prompts } from 'inquirer';
  * [ x ] Should not mutate the array passed in
  * [ x ] Should return a random array if possible (size > 1)
  * [ x ] Should return an array of the passed in length
- * [ ] Run command 'npm test' and ensure all tests for chooseRandom pass successfully
+ * [ x ] Run command 'npm test' and ensure all tests for chooseRandom pass successfully
  * 
  */
 export const chooseRandom = (arr = [], numItems) => {
@@ -53,8 +53,8 @@ export const chooseRandom = (arr = [], numItems) => {
  * @param {*} numQuestions
  * @param {*} numChoices
  * 
- * [ ] Implement 'createPrompt' using the given format below and the given test cases
- * [ ] Ensure all tests for 'createPrompt' & 'createQuestions' are passing when you run the npm test command
+ * [ x ] Implement 'createPrompt' using the given format below and the given test cases
+ * [ x ] Ensure all tests for 'createPrompt' & 'createQuestions' are passing when you run the npm test command
  * 
  */
 export const createPrompt = ({ numQuestions = 1, numChoices = 2 } = {}) => {
@@ -86,8 +86,8 @@ export const createPrompt = ({ numQuestions = 1, numChoices = 2 } = {}) => {
  * 
  * @param {*} obj 
  * 
- * [ ] Implement the 'createQuestions' function based on the format below and provided tests
- * [ ] Ensure all tests for 'createPrompt' & 'createQuestions' are passing when you run the npm test command
+ * [ x ] Implement the 'createQuestions' function based on the format below and provided tests
+ * [ x ] Ensure all tests for 'createPrompt' & 'createQuestions' are passing when you run the npm test command
  * 
  */
 export const createQuestions = (obj = {}) => {
